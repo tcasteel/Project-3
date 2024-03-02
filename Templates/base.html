@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Display</title>
+</head>
+<body>
+
+    <h1>Geographical Mobility Data</h1>
+    <ul>
+        {% for item in geo_data %}
+            <li>{{ item.NAME }}: {{ item['Geographical Mobility total'] }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h1>Transportation Employment Data</h1>
+    <ul>
+        {% for item in transportation_data %}
+            <li>{{ item.NAME }}: {{ item['Total Employed in Transportation'] }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
