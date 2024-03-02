@@ -1,7 +1,6 @@
 ﻿-- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
 -- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
-
 CREATE TABLE "tx_zip_pop" (
     "Zip" int   NOT NULL,
     "City" varchar   NOT NULL,
@@ -35,3 +34,9 @@ CREATE TABLE "tx_zip_growth" (
      )
 );
 
+ALTER TABLE "tx_zip_pop" ADD CONSTRAINT "fk_tx_zip_pop_Zip_City_County_Latitude_Longitude" FOREIGN KEY("Zip", "City", "County", "Latitude", "Longitude")
+REFERENCES "tx_zip_growth" ("Zip", "City", "County", "Latitude", "Longitude");
+
+SELECT * FROM "tx_zip_pop";
+
+SELECT * FROM "tx_zip_growth";
