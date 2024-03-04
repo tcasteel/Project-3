@@ -29,8 +29,13 @@
             text-align: left;
         }
 
-        th {
-            background-color: #f2f2f2;
+        body {
+            background-color: #f8e5ca;
+        }
+
+        canvas {
+            width: 150;
+            height: 150;
         }
     </style>
 
@@ -38,9 +43,10 @@
 
 </head>
 <body>
+    
 
     <h1>Employment Type & Employment Rates Around The US</h1>
-    <p>Within this data, it is going to show all the rates & types of Employment via the US Census Bureau.</p>
+    <p>Within this data, it is going to show the total & types of Employment via the US Census Bureau.</p>
 
     <section>
         <h2>Charts</h2>
@@ -80,7 +86,7 @@
             <option value="pie">Pie Chart</option>
         </select>
 
-        <canvas id="myChart" width="400" height="400"></canvas>
+    <canvas id="myChart" width=300 height=300></canvas>
 
         <script>
             // JavaScript code to create and update the chart based on selected chart type
@@ -89,7 +95,10 @@
             var chart = null;
 
              // Function to update the chart based on selected chart type
-            function updateChart(chartType) {
+            function updateChart(chartType, width, height) {
+
+                document.getElementById('myChart').width = 150;
+                document.getElementById('myChart').height = 150;
                 if (chart) {
                     chart.destroy(); // Destroy the existing chart
                 }
@@ -100,9 +109,9 @@
                         data: {
                             labels: [{% for row in rows %}"{{ row[0] }}", {% endfor %}],
                             datasets: [{
-                                label: 'Industry',
+                                label: 'Industry Population ',
                                 data: [{% for row in rows %}{{ row[3] }}, {% endfor %}],
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.8)',
                                 borderColor: 'rgba(54, 162, 235, 1)',
                                 borderWidth: 1
                             }]
@@ -124,15 +133,29 @@
                         data: {
                             labels: [{% for row in rows %}"{{ row[0] }}", {% endfor %}],
                             datasets: [{
-                                label: 'Industry',
+                                label: 'Industry Population',
                                 data: [{% for row in rows %}{{ row[3] }}, {% endfor %}],
                                 backgroundColor: [
-                                    'rgb(255, 99, 132)',
-                                    'rgb(54, 162, 235)',
-                                    'rgb(255, 205, 86)',
-                                    'rgb(75, 192, 192)',
-                                    'rgb(153, 102, 255)',
-                                    'rgb(255, 159, 64)'
+                                    'rgb(255, 0, 0)',
+                                    'rgb(0, 255, 0)',
+                                    'rgb(192, 192, 192)',
+                                    'rgb(255, 255, 0)',
+                                    'rgb(255, 0, 255)',
+                                    'rgb(0, 255, 255)',
+                                    'rgb(128, 0, 0)',
+                                    'rgb(0, 128, 0)',
+                                    'rgb(0, 0, 128)',
+                                    'rgb(128, 128, 0)',
+                                    'rgb(128, 0, 128)',
+                                    'rgb(0, 128, 128)',
+                                    'rgb(0, 0, 255)', 
+                                    'rgb(128, 128, 128)',
+                                    'rgb(255, 165, 0)',
+                                    'rgb(255, 192, 203)',
+                                    'rgb(255, 255, 255)', 
+                                    'rgb(0, 0, 0)',
+                                    'rgb(255, 69, 0)',
+                                    'rgb(0, 255, 127)'
                                 ],
                                 hoverOffset: 4
                             }]
@@ -144,11 +167,13 @@
                         data: {
                             labels: [{% for row in rows %}"{{ row[0] }}", {% endfor %}],
                             datasets: [{
-                                label: 'Industry',
+                                label: 'Industry Population ',
                                 data: [{% for row in rows %}{{ row[3] }}, {% endfor %}],
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 0.2)',
-                                borderWidth: 1
+                                borderColor: 'rgba(54, 162, 300, 0.2)',
+                                borderWidth: 3,
+                                pointBackgroundColor: 'rgb(0, 0, 0)',
+                                pointRadius: 4
 
                             }]
                         },
