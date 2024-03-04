@@ -33,6 +33,9 @@
             background-color: #f2f2f2;
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 <body>
 
@@ -42,16 +45,138 @@
     <section>
         <h2>Charts</h2>
         <p>The Charts show the overall employemnt data for the country.</p>
+
+        <form action="/" method="post">
+            <label for="year">Select Year:</label>
+            <select name="year" id="year">
+                <option value="2022">2022</option>
+                <option value="2021">2021</option>
+                
+            </select>
+            <label for="industry">Select Industry:</label>
+            <select name="industry" id="industry">
+                <option value="Agriculture">Agriculture</option>
+                <option value="Construction">Construction</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Wholesale">Wholesale</option>
+                <option value="Retail">Retail</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Information">Information</option>
+                <option value="Finance and Real Estate">Finance and Real Estate</option>
+                <option value="Professional, scientific, and management, and administrative and waste management services">Professional, scientific, and management, and administrative and waste management services</option>
+                <option value="Education and Health">Education and Health</option>
+                <option value="Arts, Entertainment, and Food">Arts, Entertainment, and Food</option>
+                <option value="Others, except public administration">Others, except public administration</option>
+                <option value="Public Administration">Public Administration</option>
+                
+            </select>
+            <button type="submit">Filter</button>
+        </form>
         
         <label for="chartType">Select Chart Type:</label>
         <select id="chartType">
             <option value="bar">Bar Chart</option>
-            <option value="line">Line Chart</option>
+            <option value="radar">Radar Chart</option>
             <option value="pie">Pie Chart</option>
         </select>
 
-        <div id="chartContainer">
-            <canvas id="myChart"></canvas>
+        <canvas id="myChart" width="400" height="400"></canvas>
+
+        <script>
+            // JavaScript code to create and update the chart based on selected chart type
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var chartTypeSelector = document.getElementById('chartType');
+            var chart = null;
+
+             // Function to update the chart based on selected chart type
+            function updateChart(chartType) {
+                if (chart) {
+                    chart.destroy(); // Destroy the existing chart
+                }
+                // Create new chart based on selected chart type
+                if (chartType === 'bar') {
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [{% for row in rows %}"{{ row[0] }}", {% endfor %}],
+                            datasets: [{
+                                label: 'Industry',
+                                data: [{% for row in rows %}{{ row[3] }}, {% endfor %}],
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+                        }
+                        
+                    });
+                } else if (chartType === 'pie') {
+                    chart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [{% for row in rows %}"{{ row[0] }}", {% endfor %}],
+                            datasets: [{
+                                label: 'Industry',
+                                data: [{% for row in rows %}{{ row[3] }}, {% endfor %}],
+                                backgroundColor: [
+                                    'rgb(255, 99, 132)',
+                                    'rgb(54, 162, 235)',
+                                    'rgb(255, 205, 86)',
+                                    'rgb(75, 192, 192)',
+                                    'rgb(153, 102, 255)',
+                                    'rgb(255, 159, 64)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        }
+                    });
+                } else if (chartType === 'radar') {
+                    chart = new Chart(ctx, {
+                        type: 'radar',
+                        data: {
+                            labels: [{% for row in rows %}"{{ row[0] }}", {% endfor %}],
+                            datasets: [{
+                                label: 'Industry',
+                                data: [{% for row in rows %}{{ row[3] }}, {% endfor %}],
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 0.2)',
+                                borderWidth: 1
+
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                r: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+
+            }
+                
+            
+            
+            // Event listener to update the chart when the selected chart type changes
+            chartTypeSelector.addEventListener('change', function() {
+                var selectedChartType = chartTypeSelector.value;
+                updateChart(selectedChartType);
+            });
+            // Initial chart creation with default chart type (bar chart)
+            updateChart('bar');
+
+        </script>
+
+            </canvas>
         </div>
     </section>
 
@@ -59,33 +184,19 @@
         <h2>Data Tables</h2>
         <p>The tables will show the top 20 of each dataset.</p>
 
-        <label for="dataTable">Select Data Table:</label>
-        <select id="dataTable">
-            <option value="agr_data">Agriculture Data</option>
-            <option value="con_data">Construction Data</option>
-            <option value="mfct_data">Manufacturing Data</option>
-            <option value="whole_data">Wholesale Data</option>
-            <option value="retail_data">Retail Data</option>
-            <option value="Transportation_data">Transportation Data</option>
-            <option value="info_data">Information Data</option>
-            <option value="fin_data">Finance and Real Estate Data</option>
-            <option value="pro_data">Professional, Scientific, and Management Data</option>
-            <option value="edu_data">Education and Health Data</option>
-            <option value="art_data">Arts, Entertainment, and Food Data</option>
-            <option value="other_data">Others, except public administration Data</option>
-            <option value="geo_data">Geo Data</option>
-            <option value="pa_data">Public Administration Data</option>
-        </select>
+        <!-- <label for="State">State:</label>
+        <input type="State" id="State" placeholder="State">
+        <label for="City">City:</label>
+        <input type="text" id="City" placeholder="City">
 
-        <label for="year">Year:</label>
-        <select id="year">
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-        </select>
-
-
-        <div id="selectedTable"></div>
+        <div id="selectedTable"></div> -->
     </section>
+
+    <ul>
+        {% for row in rows %}
+            <li>: {{ row[0] }} | Industry: {{ row[1] }} | Year: {{ row[2] }} | Total Employed: {{ row[3] }} </li>
+        {% endfor %}
+    </ul>
 
 </body>
 </html>
