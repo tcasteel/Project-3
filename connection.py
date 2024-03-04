@@ -1,31 +1,37 @@
+from flask import Flask, render_template
 import psycopg2
 
-def connect_to_database():
-    try:
-        #Establish connection parameters
-        conn = psycopg2.connect(
-            dbname= "Project_3",
-            user= "postgres",
-            password= "postgres",
-            host= "localhost",
-            port= "5432"
-        )
+app = Flask(__name__)
 
-        print("Connected to database successfully.")
-        return conn
-    except (Exception, psycopg2.Error) as error:
-        print("Error while connection to PostgreSQL:", error)
-        return None
+# Database connection parameters
+dbname = "Project_3"
+user = "postgres"
+password = "postgres"
+host = "localhost"  
+port = "5432"       
+
+@app.route('/')
+def index():
+    # Connect to the database
+    conn = psycopg2.connect(
+        dbname=dbname,
+        user=user,
+        password=password,
+        host=host,
+        port=port
+    )
     
-connection = connect_to_database()
-if connection:
-    # Perform database operations
-    cursor = connection.cursor()
-    cursor.execute('SELECT * FROM "industries_db";')
-    records = cursor.fetchall()
-    for row in records:
-        print(row)
+   # Execute a sample SQL query
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM industries_db")
+    rows = cursor.fetchall()
 
-    #close cursor and connection
+
+
+    # Close cursor and connection
     cursor.close()
-    connection.close()
+    conn.close()
+    # Pass the data to the template
+    return render_template('idea.html', rows=rows)
+if __name__ == '__main__':
+    app.run(debug=True)
